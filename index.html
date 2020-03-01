@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Shopping Cart</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+   <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    
+
+   <section>
+      <div class="container" id="second">
+          <h1 class="heading">PHONE FAIR</h1>
+         <div class="cart">
+            <div class="col-md-12 col-lg-10 mx-auto">
+               <div id="cartItem1" class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item">
+                        <img src="images/product-1.png" alt="">
+                        <h5>iPhone 11 128GB Black</h5>
+                     </div>
+
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id="deleteItem" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id= "quantity" type="text" class="form-control text-center" value="1">
+                           <button id="addItem" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <h5>$ <span id="unitPrice">100</span></h5>
+                        <img id="remove-item1" src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div id="cartItem2" class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <img src="images/product-2.png" alt="">
+                        <h5>iPhone 11 Silicone Case - Black</h5>
+                     </div>
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id="deleteItem1" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id= "quantity1" type="text" class="form-control text-center" value="1">
+                           <button id="addItem1" class="btn btn-default"><i class="fas fa-plus"></i></button>
+
+                        </div>
+                        <h5>$ <span id="unitPrice1">100</span></h5>
+                        <img id="remove-item2" src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+
+                     <div class="col-md-8">
+                        <h5>Subtotal: </h5>
+                        <h5>Tax(10%):</h5>
+                        <h5>Total:</h5>
+                     </div>
+
+                     <div class="col-md-4 status">
+                        <h5>$<span id="subTotal">0</span></h5>
+                        <h5>$<span id="tax">0</span></h5>
+                        <h5>$<span id="grandTotal">0</span></h5>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 pt-4 pb-4">
+                  <button type="button" class="btn btn-success check-out">Check Out</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   
+  <script>
+          
+    const addItem = document.getElementById("addItem");
+    addItem.addEventListener('click', function(){
+       const itemOneTotal = singleItemAdd("quantity",100);
+       document.getElementById("unitPrice").innerText = itemOneTotal;
+       taxCalculation();
+     });  
+    const addItem1 = document.getElementById("addItem1");
+      addItem1.addEventListener('click',function(){
+          const itemTwoTotal = singleItemAdd("quantity1",100);
+          document.getElementById("unitPrice1").innerText = itemTwoTotal; 
+          taxCalculation();
+      });       
+
+    const deleteItem = document.getElementById("deleteItem");
+    deleteItem.addEventListener('click', function(){
+       const itemOneTotalAfterdelete = singleItemDelete("quantity",100);
+        document.getElementById("unitPrice").innerText = itemOneTotalAfterdelete;  
+        taxCalculation();
+     });  
+
+
+    const deleteItem1 = document.getElementById("deleteItem1");
+     deleteItem1.addEventListener('click', function(){
+        const itemTwoTotalAfterdelete = singleItemDelete("quantity1",100);
+        document.getElementById("unitPrice1").innerText = itemTwoTotalAfterdelete;
+        taxCalculation();
+      }); 
+
+    taxCalculation();
+     
+    function taxCalculation(){
+    const subTotal1 = converSpantext("unitPrice");
+    const subTotal2 = converSpantext("unitPrice1");
+    const subTotal = subTotal1 + subTotal2;
+    const tax = subTotal*0.10;
+    const grandTotal = subTotal + tax ;
+    document.getElementById("subTotal").innerText = subTotal;   
+    document.getElementById("tax").innerText = tax;      
+    document.getElementById("grandTotal").innerText = grandTotal; 
+  }     
+
+    const removeItem1 = document.getElementById("remove-item1");
+    removeItem1.addEventListener("click", function(){
+        document.getElementById("unitPrice").innerText = 0;
+        taxCalculation();
+        hideBlock("cartItem1");
+
+    });
+    const removeItem2 = document.getElementById("remove-item2");
+    removeItem2.addEventListener("click", function(){
+        document.getElementById("unitPrice1").innerText = 0;
+        taxCalculation();
+        hideBlock("cartItem2");
+
+    });
+
+    function converSpantext(id){
+        return parseFloat(document.getElementById(id).innerText);
+    }
+    function singleItemAdd(id,unitPrice){
+        const qunatity = document.getElementById(id).value;
+        const quantityNumber = parseFloat(qunatity);
+        const newQuantity = quantityNumber + 1 ;
+        document.getElementById(id).value = newQuantity;
+        const totalPrice = unitPrice * newQuantity;
+        return totalPrice;
+     }
+
+     function singleItemDelete(id,unitPrice){
+        const qunatity = document.getElementById(id).value;
+        const quantityNumber = parseFloat(qunatity);
+        const newQuantity = quantityNumber - 1 ;
+        document.getElementById(id).value = newQuantity;
+        const totalPrice = newQuantity * unitPrice;
+        return totalPrice;
+     }
+
+    function hideBlock(id){
+        const cartItem1 = document.getElementById(id);
+        cartItem1.style.display = "none";
+        
+    } 
+  </script>
+
+
+   
+</body>
+</html>
